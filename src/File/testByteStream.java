@@ -74,8 +74,28 @@ public class testByteStream {
         File fo=new File("/Users/dingyx/1/2/3/LOL.txt");
         splitSize(2,fo);
 
+        //再将拆分的文件合并
+        //先找到拆分的文件
+        File res=new File("/Users/dingyx/1/2/3","res.txt");
+        byte[] arri=new byte[0];
+        int i=0;  //已知文件格式均为txt，且结尾为顺序数字,从0开始找
+        while(true){
+            File fi = new File("/Users/dingyx/1/2/3", "LOL.txt-" + i);
+            if(!fi.exists()){
+                break;
+            }
+            arri=combine(arri,fi);
+            i++;
+        }
+        //得到总的字节数组，在用字节输出流输出
+        try{
 
-
+            FileOutputStream fos=new FileOutputStream(res);
+            fos.write(arri);
+            fos.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -113,8 +133,7 @@ public class testByteStream {
                 eachData=Arrays.copyOfRange(data,i*size,data.length);
             }
             //通过文件输出流，将数据写入分文件
-            try{
-                FileOutputStream fos=new FileOutputStream(eachFile);
+            try(FileOutputStream fos=new FileOutputStream(eachFile);){
                 fos.write(eachData);
                 fos.close();
                 System.out.printf("输出子文件%s，其大小为%d个字节\n",eachFileName, eachFileName.length());
@@ -122,5 +141,27 @@ public class testByteStream {
                 e.printStackTrace();
             }
         }
+    }
+
+    //合并方法,将文件写入内存，并将所有的目标文件添加到一起
+    public static byte[] combine(byte[] arr,File f) {
+        //用文件输入流将文件写入内存
+        byte[] arr1 = new byte[(int) f.length()];
+        try {
+            FileInputStream fis = new FileInputStream(f);
+            fis.read(arr1);
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        byte[] newarr = new byte[arr.length + arr1.length];
+        for (int i = 0; i < arr.length; i++) {
+            newarr[i] = arr[i];
+        }
+        for (int i = 0; i < arr1.length; i++) {
+            newarr[i + arr.length] = arr1[i];
+        }
+        return newarr;
+
     }
 }
