@@ -98,8 +98,6 @@ public class testFile {
         }
         System.out.printf("最大的文件是%s，其大小是%d字节\n最小的文件是%s，其大小是%d字节",maxfile.getAbsolutePath(),maxsize
         ,minfile.getAbsolutePath(),minsize);
-
-
     }
 
 }
