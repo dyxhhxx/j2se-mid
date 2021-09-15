@@ -1,11 +1,14 @@
 package Exception;
 
+import java.io.Serializable;
+
 public class Hero {
+    private static final long serialVersionUID=1L;
     public float hp;
     public String name;
 
     //自定义异常EnemyHeroIsDeadException，当敌方英雄血量为0时，抛出异常
-    class EnemyHeroIsDeadException extends Exception{
+    class EnemyHeroIsDeadException extends Exception implements Serializable {
         public EnemyHeroIsDeadException(){
 
         }
