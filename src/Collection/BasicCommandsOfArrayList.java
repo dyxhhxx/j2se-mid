@@ -12,14 +12,14 @@ public class BasicCommandsOfArrayList {
     public static void main(String[] args) {
         //增加add
         //第一种是直接add对象，将其加在最后
-        ArrayList heros=new ArrayList();
-        for(int i=0;i<5;i++){
-            heros.add(new Hero("hero"+i));
+        ArrayList heros = new ArrayList();
+        for (int i = 0; i < 5; i++) {
+            heros.add(new Hero("hero" + i));
         }
         System.out.println(heros);  //此处重写了Hero类的toString方法，使其直接输出name属性
         //第二种是在指定位置add对象
-        Hero SuperHero=new Hero("IronMan");
-        heros.add(3,SuperHero);
+        Hero SuperHero = new Hero("IronMan");
+        heros.add(3, SuperHero);
         System.out.println(heros);
 
         //contains判断对象是否在容器中。判断标准为是否是同一个对象，而不是name是否相同
@@ -43,8 +43,8 @@ public class BasicCommandsOfArrayList {
         System.out.println(heros);
 
         //set用于替换指定位置的元素
-        Hero SuperHero1=new Hero("CaptainAmerican");
-        heros.set(0,SuperHero1);
+        Hero SuperHero1 = new Hero("CaptainAmerican");
+        heros.set(0, SuperHero1);
         System.out.println(heros);
 
         //size用于获取ArrayList的大小
@@ -53,14 +53,14 @@ public class BasicCommandsOfArrayList {
         //toArray可以将一个ArrayList对象转化为数组
 //        Hero[] heroarray=new Hero[heros.size()];
         //需要传递一个Hero数组类型的对象给toArray()，否则只会转化为Object类型的数组
-        Hero[] heroarray=(Hero[])heros.toArray(new Hero[]{});
-        for(Hero h:heroarray){
-            System.out.print(h+"\t");
+        Hero[] heroarray = (Hero[]) heros.toArray(new Hero[]{});
+        for (Hero h : heroarray) {
+            System.out.print(h + "\t");
         }
         System.out.println();
 
         //addAll将另一个容器的所有对象都加入进来
-        ArrayList superhero=new ArrayList();
+        ArrayList superhero = new ArrayList();
         superhero.add(new Hero("Thor"));
         superhero.add(new Hero("BlackWidow"));
         superhero.add(new Hero("QuickSliver"));
@@ -78,10 +78,10 @@ public class BasicCommandsOfArrayList {
         //如果需要判断集合中是否存在一个name属性是"hero1"的对象，应该怎么做
 //        Hero hero1=new Hero("hero1");
 //        System.out.println(heros.contains(hero1));   //这样做是不行的，因为这个hero1对象也是新创建的
-        for(int i=0;i<heros.size();i++){
-            Hero h=(Hero)heros.get(i);
-            if(h.name.equals("hero1")){
-                System.out.println("找到name为hero1的对象，其位置在"+i);
+        for (int i = 0; i < heros.size(); i++) {
+            Hero h = (Hero) heros.get(i);
+            if (h.name.equals("hero1")) {
+                System.out.println("找到name为hero1的对象，其位置在" + i);
                 break;
             }
         }
