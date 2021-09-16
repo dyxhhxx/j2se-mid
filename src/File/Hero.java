@@ -5,8 +5,21 @@ import java.nio.charset.StandardCharsets;
 
 public class Hero implements Serializable {
     public float hp;
-    String name;
+    public String name;
     private static final long serialVersionUID=1l;
+
+    public Hero(){
+
+    }
+
+    public Hero(String name){
+        this.name=name;
+    }
+
+    @Override
+    public String toString(){
+        return this.name;
+    }
 
     public static void main(String[] args) {
         String s="ajbdjhsab";

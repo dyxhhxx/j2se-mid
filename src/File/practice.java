@@ -1,9 +1,7 @@
 package File;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.Locale;
 
 public class practice {
 
@@ -112,15 +110,27 @@ public class practice {
         //将文件夹中的所有文件遍历出来
         File[] fa=Folder.listFiles();
         for(File f0:fa){
+            //如果是文件夹就递归继续寻找下层目录
             if(f0.isDirectory()){
                 File f1=new File(f0.getParent(),f0.getName());
                 searchFile(f0,search);
             }
+            //如果是文件，先判断是否是java文件，如果是将所有文件内容转化为字符串，用contains方法判断是否还有search
             if(f0.isFile()){
-                
+                if(f0.getName().toLowerCase().endsWith("java")) {  //判断是否为java文件
+                    char[] f0char = new char[(int) f0.length()];
+                    try (FileReader fr = new FileReader(f0)) {
+                        fr.read(f0char);
+                        String f0s = new String(f0char);
+                        if (f0s.contains(search)) {
+                            System.out.printf("找到目标字符串%s，在文件：%s\n", search, f0.getAbsolutePath());
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
-
     }
 
 
@@ -129,6 +139,10 @@ public class practice {
 //        File f2=new File("/Users/dingyx/LOL2.txt");
 //        copyFile(f1,f2);
 //        copyFileByPath("/Users/dingyx/LOL1.txt","/Users/dingyx/LOL2.txt");
-        copyFolder("/Users/dingyx/1","/Users/dingyx/2");
+
+//        copyFolder("/Users/dingyx/1","/Users/dingyx/2");
+
+        File f3=new File("/Users/dingyx/IdeaProjects/j2se/src");
+        searchFile(f3,"array");
     }
 }
