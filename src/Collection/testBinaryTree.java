@@ -64,9 +64,9 @@ class Node{
         }
         return ranking;
     }
+}
 
     //practice
-
     //创建一个大小为40000的随机数组
     //分别用冒泡法，选择法，二叉树进行排序
     //比较哪种比较快
@@ -74,5 +74,3 @@ class Node{
 
 
 
-
-}

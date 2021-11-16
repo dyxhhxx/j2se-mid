@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 
 public class Hero implements Serializable {
-    public float hp;
+    public int hp;
     public String name;
     private static final long serialVersionUID=1l;
 
@@ -16,9 +16,11 @@ public class Hero implements Serializable {
         this.name=name;
     }
 
+    public Hero(int hp){this.hp=hp;};
+
     @Override
     public String toString(){
-        return this.name;
+        return "[name:"+this.name+" hp:"+this.hp+"]";
     }
 
     public static void main(String[] args) {
