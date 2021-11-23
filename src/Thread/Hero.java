@@ -6,12 +6,12 @@ public class Hero {
     public int damage;
 
     public void attackHero(Hero h){
-        try{
+//        try{
             //为了表示攻击需要时间，每次攻击暂停1000ms
-            Thread.sleep(1000);
-        }catch(InterruptedException e){
-            e.printStackTrace();
-        }
+//            Thread.sleep(1000);
+//        }catch(InterruptedException e){
+//            e.printStackTrace();
+//        }
         h.hp-=damage;
         if(h.hp>0){
             System.out.printf("%s正在攻击%s，%s的血量变成了%d\n",name,h.name,h.name,h.hp);
@@ -24,5 +24,13 @@ public class Hero {
 
     public boolean isDead(){
         return (hp<=0);
+    }
+
+    public void recover(){
+        hp+=1;
+    }
+
+    public void hurt(){
+        hp-=1;
     }
 }
