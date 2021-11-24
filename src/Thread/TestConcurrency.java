@@ -8,7 +8,7 @@ public class TestConcurrency {
     //多线程的同步问题指，多个线程同时修改同一个数据时，可能导致的问题
     public static void main(String[] args) {
 
-        final Object someObject = new Object();
+        final Object lock = new Object();
         Hero gareen = new Hero();
         gareen.name = "盖伦";
         gareen.hp = 66000;
@@ -24,7 +24,7 @@ public class TestConcurrency {
                 @Override
                 public void run() {
                     //用synchronized修饰，保证线程同步
-                    synchronized (someObject) {
+                    synchronized (lock) {
                         gareen.recover();
                     }
                     try {
@@ -43,7 +43,7 @@ public class TestConcurrency {
             Thread t = new Thread() {
                 @Override
                 public void run() {
-                    synchronized (someObject) {
+                    synchronized (lock) {
                         gareen.hurt();
                     }
                     try {
@@ -81,7 +81,7 @@ public class TestConcurrency {
         //关键字synchronized，表示当前线程独占对象someObject（注意：synchrozized只能修饰对象或方法）
         // 如果有其他线程试图占有对象someObject，就会等待，直至当前线程释放someObject的占用
         //因此，为了达到同步的效果，必须使用同一个同步对象
-//        synchronized (someObject){
+//        synchronized (lock){
 //            //该代码快中的代码只有占有了someObject后才可以执行
 //        }
         Thread t1 = new Thread() {
@@ -89,11 +89,11 @@ public class TestConcurrency {
             public void run() {
                 try {
                     System.out.println(now() + "t1线程已运行");
-                    System.out.println(now() + this.getName() + "线程试图占有对象：someObject");
-                    synchronized (someObject) {
-                        System.out.println(now() + this.getName() + "线程已经占有对象：someObject");
+                    System.out.println(now() + this.getName() + "线程试图占有对象：lock");
+                    synchronized (lock) {
+                        System.out.println(now() + this.getName() + "线程已经占有对象：lock");
                         Thread.sleep(5000);
-                        System.out.println(now() + this.getName() + "线程释放对象：someObject");
+                        System.out.println(now() + this.getName() + "线程释放对象：lock");
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -107,11 +107,11 @@ public class TestConcurrency {
             public void run() {
                 try {
                     System.out.println(now() + "t2线程已经运行");
-                    System.out.println(now() + this.getName() + "线程试图占有对象：someObject");
-                    synchronized (someObject) {
-                        System.out.println(now() + this.getName() + "线程已经占有对象:someObject");
+                    System.out.println(now() + this.getName() + "线程试图占有对象：lock");
+                    synchronized (lock) {
+                        System.out.println(now() + this.getName() + "线程已经占有对象:lock");
                         Thread.sleep(5000);
-                        System.out.println(now() + this.getName() + "线程释放对象:someObject");
+                        System.out.println(now() + this.getName() + "线程释放对象:lock");
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
