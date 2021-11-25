@@ -7,9 +7,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class Practice {
 
+
+    //借助线程池查找文件内容，遍历到java文件时，将该文件丢进线程池中去执行，继续向下遍历
     //先写一个方法将一个文件转化为字符串
     public static String readFile(File f) {
         try (FileReader fr = new FileReader(f)) {
@@ -24,6 +29,7 @@ public class Practice {
 
     //写一个方法遍历文件夹,分为两种情况，若对象为文件，开始查找；若对象为文件夹，递归进入文件夹乡下人查找
     public static void searchContent(File folder, String content) {
+        ThreadPoolExecutor threadpool=new ThreadPoolExecutor(10,15,60, TimeUnit.SECONDS,new LinkedBlockingQueue<Runnable>());
         if (folder.isDirectory()) {
             File[] filearray = folder.listFiles();
             for (File f : filearray) {
@@ -32,16 +38,25 @@ public class Practice {
         }
         if (folder.isFile()) {
             if (folder.getName().toLowerCase().endsWith(".java")) {
-                Thread t1 = new Thread() {
+//                Thread t1 = new Thread() {
+//                    @Override
+//                    public void run() {
+//                        String fileContent = readFile(folder);
+//                        if (fileContent.contains(content)) {
+//                            System.out.printf("找到目标字符串%s，在文件夹%s\n", content, folder);
+//                        }
+//                    }
+//                };
+//                t1.start();
+                threadpool.execute(new Runnable() {
                     @Override
                     public void run() {
-                        String fileContent = readFile(folder);
-                        if (fileContent.contains(content)) {
-                            System.out.printf("找到目标字符串%s，在文件夹%s\n", content, folder);
-                        }
+                       String filecontent=readFile(folder);
+                       if(filecontent.contains(content)){
+                           System.out.printf("找到目标字符串%s，在文件夹%s\n", content, folder);
+                       }
                     }
-                };
-                t1.start();
+                });
             }
         }
     }
@@ -72,48 +87,48 @@ public class Practice {
     public static void main(String[] args) {
         //线程练习1：遍历所有文件，当遍历到一个文件是java文件时，创建一个线程去查找这个文件当内容
         //不必等待这个线程结束，继续遍历下一个文件
-//        File f=new File("/Users/dingyx/IdeaProjects");
-//        searchContent(f,"Hero");
+        File f=new File("/Users/dingyx/IdeaProjects");
+        searchContent(f,"Hero");
 
         //线程练习2
         //生成一个长度是3当随机字符串
         //创建一个破解线程，使用穷举法，匹配这个密码
         //创建一个日志线程，打印都用过哪些字符串去匹配，这个日志线程设计为守护线程
-        String psw = generatePsw(3);
-        System.out.printf("随机生成的密码是%s\n", psw);
-        //利用穷举法，破解线程将生成的所有可能密码放在一个容器中，日志线程不断的从这个容器中拿出可能密码，并打印出来
-        //日志线程取密码时，若发现容器是空的就休息1s
-        List<String> pswDocker = new ArrayList<>();
-        Thread crackThread = new Thread() {
-            @Override
-            public void run() {
-                String random = generatePsw(3);
-                while (!random.equals(psw)) {
-                    pswDocker.add(random);
-                    random = generatePsw(3);
-                }
-                System.out.printf("穷举法匹配的结果是：%s\n", random);
-            }
-        };
-        Thread dialogThread = new Thread() {
-            @Override
-            public void run() {
-                while (true) {
-                    if (pswDocker.size() == 0) {
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        System.out.println(pswDocker.remove(0));
-                    }
-                }
-            }
-        };
-        dialogThread.setDaemon(true);
-        crackThread.start();
-        dialogThread.start();
+//        String psw = generatePsw(3);
+//        System.out.printf("随机生成的密码是%s\n", psw);
+//        //利用穷举法，破解线程将生成的所有可能密码放在一个容器中，日志线程不断的从这个容器中拿出可能密码，并打印出来
+//        //日志线程取密码时，若发现容器是空的就休息1s
+//        List<String> pswDocker = new ArrayList<>();
+//        Thread crackThread = new Thread() {
+//            @Override
+//            public void run() {
+//                String random = generatePsw(3);
+//                while (!random.equals(psw)) {
+//                    pswDocker.add(random);
+//                    random = generatePsw(3);
+//                }
+//                System.out.printf("穷举法匹配的结果是：%s\n", random);
+//            }
+//        };
+//        Thread dialogThread = new Thread() {
+//            @Override
+//            public void run() {
+//                while (true) {
+//                    if (pswDocker.size() == 0) {
+//                        try {
+//                            Thread.sleep(100);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    } else {
+//                        System.out.println(pswDocker.remove(0));
+//                    }
+//                }
+//            }
+//        };
+//        dialogThread.setDaemon(true);
+//        crackThread.start();
+//        dialogThread.start();
 
 
     }
